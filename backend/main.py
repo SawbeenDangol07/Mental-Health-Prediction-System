@@ -175,7 +175,7 @@ async def root():
         "database": "Neon Serverless PostgreSQL",
         "tables": ["users", "predictions", "user_input_history"],
         "model": "Linear Support Vector Machine (LinearSVC)",
-        "docs_url": "http://localhost:8000/docs"
+        "docs_url": "/docs"
     }
 
 
