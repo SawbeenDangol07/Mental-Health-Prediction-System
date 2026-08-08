@@ -14,6 +14,7 @@ from contextlib import asynccontextmanager
 from typing import Optional, List
 
 from fastapi import FastAPI, HTTPException, status, Depends, Query
+from fastapi.responses import PlainTextResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
@@ -68,6 +69,7 @@ app = FastAPI(
 # CORS Middleware Setup
 # =============================================================================
 origins = [
+    "https://mental-health-prediction-system-orcin.vercel.app",  # Production Vercel Frontend
     "http://localhost:5173",  # Vite React dev server default
     "http://localhost:3000",  # Alternative React port
     "http://127.0.0.1:5173",
@@ -177,6 +179,18 @@ async def root():
         "model": "Linear Support Vector Machine (LinearSVC)",
         "docs_url": "/docs"
     }
+
+
+@app.get("/ping", response_class=PlainTextResponse, tags=["General"])
+@app.get("/keep-alive", response_class=PlainTextResponse, tags=["General"])
+@app.get("/api/ping", response_class=PlainTextResponse, tags=["General"])
+async def keep_alive():
+    """
+    Lightweight Open Keep-Alive / Ping Endpoint.
+    Returns plain text 'pong' with zero database or ML processing overhead.
+    Designed for cron jobs, UptimeRobot, or external pingers to keep backend server active and prevent cold starts/sleep.
+    """
+    return "pong"
 
 
 @app.get("/health", tags=["General"])
