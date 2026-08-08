@@ -5,7 +5,30 @@
  * Base URL: http://localhost:8000
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://mental-health-prediction-system-di53.onrender.com';
+// Dynamic API URL selection based on local dev (npm run dev) vs production deployment
+const getApiBaseUrl = () => {
+  const envUrl = import.meta.env.VITE_API_BASE_URL;
+
+  // Auto-correct old placeholder URL if present in Vercel settings
+  if (envUrl && envUrl.includes('mental-health-backend.onrender.com')) {
+    return 'https://mental-health-prediction-system-di53.onrender.com';
+  }
+
+  // Use custom environment variable if explicitly provided
+  if (envUrl) {
+    return envUrl;
+  }
+
+  // Local development mode (npm run dev) -> http://localhost:8000
+  if (import.meta.env.DEV) {
+    return 'http://localhost:8000';
+  }
+
+  // Live Production deployment (Vercel / Render) -> Actual Render URL
+  return 'https://mental-health-prediction-system-di53.onrender.com';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 const STORAGE_KEYS = {
   CURRENT_USER: 'mh_app_current_user',
