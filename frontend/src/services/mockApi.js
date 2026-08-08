@@ -105,40 +105,54 @@ export const mockAuthService = {
 
   // Login via FastAPI Backend
   login: async (email, password) => {
-    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.detail || 'Invalid email or password. Please try again.');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'Invalid email or password. Please try again.');
+      }
+
+      const user = await response.json();
+      const sessionUser = { id: user.id, name: user.name, email: user.email };
+      localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(sessionUser));
+      return sessionUser;
+    } catch (err) {
+      if (err.name === 'TypeError' || err.message.toLowerCase().includes('fetch')) {
+        throw new Error(`Cannot connect to backend server at ${API_BASE_URL}. Please make sure the backend server is running (or wait ~30s if waking up from Render sleep).`);
+      }
+      throw err;
     }
-
-    const user = await response.json();
-    const sessionUser = { id: user.id, name: user.name, email: user.email };
-    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(sessionUser));
-    return sessionUser;
   },
 
   // Signup via FastAPI Backend
   signup: async (name, email, password) => {
-    const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password }),
-    });
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password }),
+      });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.detail || 'Failed to create an account. Please try again.');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'Failed to create an account. Please try again.');
+      }
+
+      const user = await response.json();
+      const sessionUser = { id: user.id, name: user.name, email: user.email };
+      localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(sessionUser));
+      return sessionUser;
+    } catch (err) {
+      if (err.name === 'TypeError' || err.message.toLowerCase().includes('fetch')) {
+        throw new Error(`Cannot connect to backend server at ${API_BASE_URL}. Please make sure the backend server is running (or wait ~30s if waking up from Render sleep).`);
+      }
+      throw err;
     }
-
-    const user = await response.json();
-    const sessionUser = { id: user.id, name: user.name, email: user.email };
-    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(sessionUser));
-    return sessionUser;
   },
 
   // Logout session
