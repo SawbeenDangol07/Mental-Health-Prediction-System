@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { User, Mail, Lock, UserPlus, BrainCircuit, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { User, Mail, Lock, UserPlus, BrainCircuit, AlertCircle, Eye, EyeOff, Check, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export const Signup = () => {
@@ -16,6 +16,11 @@ export const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Password validation criteria states
+  const hasMinLength = password.length >= 8;
+  const hasUppercase = /[A-Z]/.test(password);
+  const hasSymbol = /[^A-Za-z0-9]/.test(password);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name || !email || !password || !confirmPassword) {
@@ -23,13 +28,23 @@ export const Signup = () => {
       return;
     }
 
-    if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+    if (!hasMinLength) {
+      setError('Password must be at least 8 characters long.');
       return;
     }
 
-    if (password.length < 6) {
-      setError('Password should be at least 6 characters.');
+    if (!hasUppercase) {
+      setError('Password must contain at least one uppercase letter (A-Z).');
+      return;
+    }
+
+    if (!hasSymbol) {
+      setError('Password must contain at least one special symbol (e.g. !@#$%).');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
       return;
     }
 
@@ -131,6 +146,24 @@ export const Signup = () => {
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
+
+            {/* Password Requirement Indicators */}
+            {password.length > 0 && (
+              <div className="mt-2.5 p-2.5 rounded-xl bg-slate-100/70 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60 grid grid-cols-3 gap-1.5 text-[11px]">
+                <div className={`flex items-center space-x-1 font-medium ${hasMinLength ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`}>
+                  {hasMinLength ? <Check className="w-3 h-3 shrink-0 text-emerald-500" /> : <X className="w-3 h-3 shrink-0" />}
+                  <span>8+ Chars</span>
+                </div>
+                <div className={`flex items-center space-x-1 font-medium ${hasUppercase ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`}>
+                  {hasUppercase ? <Check className="w-3 h-3 shrink-0 text-emerald-500" /> : <X className="w-3 h-3 shrink-0" />}
+                  <span>1 Uppercase</span>
+                </div>
+                <div className={`flex items-center space-x-1 font-medium ${hasSymbol ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`}>
+                  {hasSymbol ? <Check className="w-3 h-3 shrink-0 text-emerald-500" /> : <X className="w-3 h-3 shrink-0" />}
+                  <span>1 Symbol</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Confirm Password Field */}

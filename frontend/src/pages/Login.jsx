@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Lock, LogIn, BrainCircuit, AlertCircle, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
+import { Mail, Lock, LogIn, BrainCircuit, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export const Login = () => {
@@ -34,12 +34,6 @@ export const Login = () => {
     }
   };
 
-  const handleDemoFill = () => {
-    setEmail('demo@example.com');
-    setPassword('password123');
-    setError('');
-  };
-
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
       <motion.div
@@ -58,21 +52,6 @@ export const Login = () => {
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Sign in to access your mental health history and SVM insights
           </p>
-        </div>
-
-        {/* Quick Demo Credentials Fill Button */}
-        <div className="mb-6 p-3 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-between text-xs">
-          <div className="flex items-center space-x-2 text-blue-700 dark:text-blue-300 font-medium">
-            <CheckCircle2 className="w-4 h-4 text-blue-500" />
-            <span>Test Credentials available</span>
-          </div>
-          <button
-            type="button"
-            onClick={handleDemoFill}
-            className="px-2.5 py-1 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition-colors"
-          >
-            Auto Fill Demo
-          </button>
         </div>
 
         {error && (
