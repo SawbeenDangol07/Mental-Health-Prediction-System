@@ -48,11 +48,11 @@ export const Footer = () => {
         </div>
 
         <div className="pt-6 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 dark:text-slate-400 gap-4">
-          <p>© {new Date().getFullYear()} Mental Health Prediction SVM Project. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Mental Health Prediction SVM Project by <strong className="text-slate-700 dark:text-slate-200 font-bold">Sabin Dangol</strong>. All rights reserved.</p>
           <div className="flex items-center space-x-1">
             <span>Built with</span>
             <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 inline" />
-            <span>using React & Tailwind CSS</span>
+            <span>by Sabin Dangol</span>
           </div>
         </div>
       </div>

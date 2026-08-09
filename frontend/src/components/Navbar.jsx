@@ -56,7 +56,19 @@ export const Navbar = () => {
               }`}
             >
               <HomeIcon className="w-4 h-4" />
-              <span>Dashboard</span>
+              <span>Home</span>
+            </Link>
+
+            <Link
+              to="/predict"
+              className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                isActive('/predict')
+                  ? 'bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400 font-semibold'
+                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60'
+              }`}
+            >
+              <BrainCircuit className="w-4 h-4 text-blue-500" />
+              <span>Check Mental Health</span>
             </Link>
 
             <Link
@@ -157,7 +169,15 @@ export const Navbar = () => {
             className="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             <HomeIcon className="w-5 h-5 text-blue-500" />
-            <span>Dashboard</span>
+            <span>Home</span>
+          </Link>
+          <Link
+            to="/predict"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <BrainCircuit className="w-5 h-5 text-blue-500" />
+            <span>Check Mental Health</span>
           </Link>
           <Link
             to="/history"
