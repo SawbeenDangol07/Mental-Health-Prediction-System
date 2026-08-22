@@ -1,12 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/ping",
-      "destination": "https://mental-health-prediction-system-di53.onrender.com/ping"
-    },
-    {
-      "source": "/keep-alive",
-      "destination": "https://mental-health-prediction-system-di53.onrender.com/keep-alive"
+      "source": "/health",
+      "destination": "https://mental-health-prediction-system-di53.onrender.com/health"
     },
     {
       "source": "/api/:path*",

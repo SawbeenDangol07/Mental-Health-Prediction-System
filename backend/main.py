@@ -23,6 +23,7 @@ from sqlalchemy.orm import Session
 from database import engine, Base, get_db, check_db_connection
 import db_models
 from predictor import load_models, predict_mental_health
+from health import router as health_router
 
 
 # =============================================================================
@@ -64,6 +65,9 @@ app = FastAPI(
     version="1.2.0",
     lifespan=lifespan
 )
+
+# Include separate health & uptime router
+app.include_router(health_router)
 
 # =============================================================================
 # CORS Middleware Setup
@@ -178,38 +182,6 @@ async def root():
         "tables": ["users", "predictions", "user_input_history"],
         "model": "Linear Support Vector Machine (LinearSVC)",
         "docs_url": "/docs"
-    }
-
-
-@app.get("/ping", response_class=PlainTextResponse, tags=["General"])
-@app.get("/keep-alive", response_class=PlainTextResponse, tags=["General"])
-@app.get("/api/ping", response_class=PlainTextResponse, tags=["General"])
-async def keep_alive():
-    """
-    Lightweight Open Keep-Alive / Ping Endpoint.
-    Returns plain text 'pong' with zero database or ML processing overhead.
-    Designed for cron jobs, UptimeRobot, or external pingers to keep backend server active and prevent cold starts/sleep.
-    """
-    return "pong"
-
-
-@app.get("/health", tags=["General"])
-async def health_check(db: Session = Depends(get_db)):
-    """
-    Health Check Endpoint.
-    Verifies API server and Neon PostgreSQL database connection.
-    """
-    db_status = "connected"
-    try:
-        db.execute(db_models.User.__table__.select().limit(1))
-    except Exception as e:
-        db_status = f"error: {str(e)}"
-
-    return {
-        "status": "healthy",
-        "database": db_status,
-        "timestamp": datetime.datetime.utcnow().isoformat() + "Z",
-        "message": "Backend server and Neon Database are connected and running."
     }
 
 
